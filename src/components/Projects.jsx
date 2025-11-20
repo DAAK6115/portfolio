@@ -10,13 +10,14 @@ const projects = [
     repoUrl: "https://github.com/DAAK6115/ARTISAN_CI",
   },
   {
-    name: "Application d’épargne simple",
-    stack: "React Native • Expo • Node.js",
-    desc: "Suivi des contributions, rappels, historique des transactions sur mobile.",
-    image: "/projects/epargne.png", // <-- à créer dans public/projects
-    demoUrl: "",
-    repoUrl: "",
-  },
+    name: "Pêche & Sensibilisation",
+    stack: "Flutter • Dart • Web",
+    desc: "Application de sensibilisation à la pêche responsable, accessible directement dans le navigateur.",
+    image: "/projects/peche_sensibilisation.png", // si tu ajoutes une capture dans public/projects
+    demoUrl: "https://daak6115.github.io/peche_sensibilisation/",
+    repoUrl: "https://github.com/DAAK6115/peche_sensibilisation",
+},
+
   {
     name: "Dashboard de suivi de livres",
     stack: "Django • React • API REST",
