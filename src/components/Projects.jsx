@@ -1,35 +1,63 @@
 import { motion } from "framer-motion";
 
+const path = window.location.pathname;
+const PUBLIC_BASE = path.startsWith("/portfolio") ? "/portfolio/" : "/";
+
 const projects = [
   {
     name: "ARTISAN_CI",
     stack: "React • Django • Tailwind",
     desc: "Plateforme pour connecter les artisans et leurs clients en Côte d'Ivoire.",
-    image: "/projects/artisan_ci.png", // <-- ton image
+    image: `${PUBLIC_BASE}projects/artisan_ci.jpg`,
     demoUrl: "https://artisan-ci-mauve.vercel.app",
     repoUrl: "https://github.com/DAAK6115/ARTISAN_CI",
   },
   {
     name: "Pêche & Sensibilisation",
     stack: "Flutter • Dart • Web",
-    desc: "Application de sensibilisation à la pêche responsable, accessible directement dans le navigateur.",
-    image: "/projects/peche_sensibilisation.png", // si tu ajoutes une capture dans public/projects
+    desc: "Application Mobile de sensibilisation à la pêche responsable, accessible directement dans le navigateur.",
+    image: `${PUBLIC_BASE}projects/peche_sensibilisation.jpg`,
     demoUrl: "https://daak6115.github.io/peche_sensibilisation/",
     repoUrl: "https://github.com/DAAK6115/peche_sensibilisation",
-},
-
+  },
   {
     name: "Dashboard de suivi de livres",
     stack: "Django • React • API REST",
     desc: "Visualisation des stocks, ventes et distributions par centre sur une interface web.",
-    image: "/projects/dashboard_livres.png", // <-- à créer dans public/projects
-    demoUrl: "",
-    repoUrl: "",
+    image: `${PUBLIC_BASE}projects/gestion_livre.jpg`,
+    demoUrl: "https://gestion-livre.onrender.com",
+    repoUrl: "https://github.com/DAAK6115/gestion_livre",
   },
+  {
+  name: "Formulaire de Récupération de données pour DocteurPc",
+  stack: "WordPress",
+  desc: "Création de formulaire pour avoir des informations sur le client et le type de support endommagé",
+  image: `${PUBLIC_BASE}projects/recup_docteurpc.jpg`, // ou .png selon ton fichier
+  demoUrl: "https://docteurpc.ci/formulaire-de-recuperation-de-donnees/",
+},
+{
+  name: "NexaFinance",
+  stack: "WordPress",
+  desc: "Site Web pour une société de conseil financier et de gestion à forte valeur ajoutée pour les petites et moyennes entreprises (PME) ",
+  image: `${PUBLIC_BASE}projects/nexafinance.jpg`, // ou .png selon ton fichier
+  demoUrl: "https://nexafinance.net/",
+},
+{
+  name: "DAAK_TECH",
+  stack: "WordPress",
+  desc: "Site Web pour une start-up qui conçoit des solutions numériques innovantes et sur mesure, fais de la maintenance informatique, de la récupération de données et la personnalisation d'ordinateur.",
+  image: `${PUBLIC_BASE}projects/daaktech.jpg`, // ou .png selon ton fichier
+  demoUrl: "https://daaktech.com/",
+},
 ];
+
 
 export default function Projects() {
   return (
+    <section
+      id="projects"
+      className="border-b border-slate-800 py-16"
+    >
     <div className="max-w-6xl mx-auto px-4">
       <h2 className="text-2xl md:text-3xl font-semibold mb-2">Projets</h2>
       <p className="text-slate-400 mb-8">
@@ -50,14 +78,15 @@ export default function Projects() {
           >
             {/* Image du projet */}
             {project.image && (
-              <div className="mb-4 overflow-hidden rounded-xl border border-slate-800/60 bg-slate-900/60">
-                <img
-                  src={project.image}
-                  alt={project.name}
-                  className="w-full h-40 object-cover transition-transform duration-300 hover:scale-105"
-                />
-              </div>
-            )}
+  <div className="mb-4 rounded-3xl border border-slate-800/60 bg-slate-900/60 overflow-hidden">
+    <img
+      src={project.image}
+      alt={project.name}
+      className="w-full h-40 md:h-48 object-cover transition-transform duration-300 hover:scale-105"
+    />
+  </div>
+)}
+
 
             {/* Texte */}
             <div className="flex-1 flex flex-col">
@@ -94,5 +123,6 @@ export default function Projects() {
         ))}
       </div>
     </div>
+    </section>
   );
 }

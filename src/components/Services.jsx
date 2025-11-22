@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 const services = [
   {
-    title: "Applications web sur mesure",
+    title: "Sites Internet et Applications web sur mesure",
     desc: "Sites et tableaux de bord modernes, optimisés pour la performance et l'expérience utilisateur.",
   },
   {
