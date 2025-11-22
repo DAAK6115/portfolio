@@ -1,119 +1,96 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 
-const FORM_ENDPOINT =
-  "https://formsubmit.co/ajax/diomandezazzizangekevin@gmail.com";
+const DEST_EMAIL = "diomandezazzizangekevin@gmail.com";
 
 export default function Contact() {
-  const [status, setStatus] = useState(null); // "loading" | "success" | "error" | null
+  const [copied, setCopied] = useState(false);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setStatus("loading");
-
-    const formData = new FormData(e.target);
-    const payload = Object.fromEntries(formData.entries());
-
-    try {
-      const res = await fetch(FORM_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(payload),
+  function handleCopy() {
+    navigator.clipboard
+      ?.writeText(DEST_EMAIL)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch(() => {
+        setCopied(false);
       });
-
-      if (res.ok) {
-        setStatus("success");
-        e.target.reset();
-      } else {
-        setStatus("error");
-      }
-    } catch (err) {
-      setStatus("error");
-    }
   }
 
   return (
     <section id="contact" className="border-t border-slate-800 py-16">
       <motion.div
-        className="max-w-3xl mx-auto px-4"
+        className="max-w-4xl mx-auto px-4"
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 0.5 }}
       >
-        <h2 className="text-2xl md:text-3xl font-semibold mb-2">Contact</h2>
-        <p className="text-slate-400 mb-6">
-          Un projet, une idée, une question ? Envoie-moi un message et je te
-          répondrai rapidement.
+        <p className="text-xs uppercase tracking-[0.25em] text-slate-500 mb-2">
+          Me contacter
+        </p>
+        <h2 className="text-2xl md:text-3xl font-semibold mb-3">
+          Parlons de ton projet
+        </h2>
+        <p className="text-slate-400 max-w-2xl">
+          Tu cherches quelqu’un pour t’aider sur un projet créatif, technique
+          ou tu veux simplement en savoir plus sur mon profil ?
+          <br className="hidden sm:block" /> Contacte-moi directement par e-mail.
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2">
-            <div>
-              <label className="block text-sm mb-1 text-slate-200">
-                Nom complet
-              </label>
-              <input
-                type="text"
-                name="name" // ← important pour l'email reçu
-                required
-                className="w-full rounded-xl bg-slate-900/60 border border-slate-700 px-3 py-2 text-sm outline-none focus:border-sky-400"
-              />
-            </div>
-            <div>
-              <label className="block text-sm mb-1 text-slate-200">
+        {/* Carte de contact */}
+        <div className="mt-8 rounded-2xl border border-slate-800 bg-slate-900/70 backdrop-blur p-6 md:p-8 flex flex-col md:flex-row gap-6 md:items-center">
+          <div className="flex-1 space-y-2">
+            <h3 className="text-lg md:text-xl font-semibold text-slate-50">
+              Disponibilité & collaborations
+            </h3>
+            <p className="text-sm text-slate-400">
+              Je suis ouvert aux{" "}
+              <span className="font-medium text-sky-300">
+                collaborations, stages, missions
+              </span>{" "}
+              et projets sérieux autour de la création de site web, du développement d'applications web et mobile, de la récupération de données
+              et de la maintenance.
+            </p>
+
+            <div className="mt-4">
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-1">
                 Adresse e-mail
-              </label>
-              <input
-                type="email"
-                name="email" // ← pour pouvoir te répondre
-                required
-                className="w-full rounded-xl bg-slate-900/60 border border-slate-700 px-3 py-2 text-sm outline-none focus:border-sky-400"
-              />
+              </p>
+              <div className="inline-flex items-center gap-2 rounded-full bg-slate-950/60 border border-slate-700 px-4 py-2">
+                <span className="text-xs md:text-sm text-sky-100 font-mono">
+                  {DEST_EMAIL}
+                </span>
+              </div>
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm mb-1 text-slate-200">
-              Message
-            </label>
-            <textarea
-              name="message" // ← le contenu du mail
-              required
-              rows={4}
-              className="w-full rounded-xl bg-slate-900/60 border border-slate-700 px-3 py-2 text-sm outline-none focus:border-sky-400 resize-none"
-            />
+          {/* Boutons d’action */}
+          <div className="md:w-[220px] flex flex-col gap-3">
+            <a
+              href={`mailto:${DEST_EMAIL}?subject=${encodeURIComponent(
+                "Contact via le portfolio"
+              )}`}
+              className="inline-flex items-center justify-center rounded-full bg-sky-500 hover:bg-sky-400 text-sm font-medium text-slate-950 px-4 py-2.5 transition"
+            >
+              ✉️ M&apos;écrire un e-mail
+            </a>
+
+            <button
+              type="button"
+              onClick={handleCopy}
+              className="inline-flex items-center justify-center rounded-full border border-slate-600 hover:border-sky-400 text-sm font-medium text-slate-100 px-4 py-2.5 transition"
+            >
+              {copied ? "Adresse copiée ✔" : "Copier l’adresse e-mail"}
+            </button>
+
+            <p className="text-[11px] text-slate-500 text-center">
+              Tu peux aussi m&apos;ajouter à tes contacts pour me retrouver plus
+              facilement plus tard.
+            </p>
           </div>
-
-          <button
-            type="submit"
-            disabled={status === "loading"}
-            className="px-4 py-2 rounded-full bg-sky-500 hover:bg-sky-400 disabled:opacity-60 text-sm font-medium transition"
-          >
-            {status === "loading" ? "Envoi en cours..." : "Envoyer"}
-          </button>
-
-          {status === "success" && (
-            <p className="text-sm text-emerald-400 pt-2">
-              Merci pour ton message, il a bien été envoyé !
-            </p>
-          )}
-          {status === "error" && (
-            <p className="text-sm text-rose-400 pt-2">
-              Oups, une erreur est survenue. Tu peux aussi m&apos;écrire à{" "}
-              <a
-                href="mailto:diomandezazzizangekevin@gmail.com"
-                className="underline"
-              >
-                diomandezazzizangekevin@gmail.com
-              </a>
-              .
-            </p>
-          )}
-        </form>
+        </div>
       </motion.div>
     </section>
   );
