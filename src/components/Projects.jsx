@@ -1,128 +1,107 @@
-import { motion } from "framer-motion";
+import { useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { projects } from "../data";
+import SectionHeading from "./SectionHeading";
+import { Icon, GithubIcon } from "./Icons";
 
-const path = window.location.pathname;
-const PUBLIC_BASE = path.startsWith("/portfolio") ? "/portfolio/" : "/";
-
-const projects = [
-  {
-    name: "ARTISAN_CI",
-    stack: "React • Django • Tailwind",
-    desc: "Plateforme pour connecter les artisans et leurs clients en Côte d'Ivoire.",
-    image: `${PUBLIC_BASE}projects/artisan_ci.jpg`,
-    demoUrl: "https://artisan-ci-mauve.vercel.app",
-    repoUrl: "https://github.com/DAAK6115/ARTISAN_CI",
-  },
-  {
-    name: "Pêche & Sensibilisation",
-    stack: "Flutter • Dart • Web",
-    desc: "Application Mobile de sensibilisation à la pêche responsable, accessible directement dans le navigateur.",
-    image: `${PUBLIC_BASE}projects/peche_sensibilisation.jpg`,
-    demoUrl: "https://daak6115.github.io/peche_sensibilisation/",
-    repoUrl: "https://github.com/DAAK6115/peche_sensibilisation",
-  },
-  {
-    name: "Dashboard de suivi de livres",
-    stack: "Django • React • API REST",
-    desc: "Visualisation des stocks, ventes et distributions par centre sur une interface web.",
-    image: `${PUBLIC_BASE}projects/gestion_livre.jpg`,
-    demoUrl: "https://gestion-livre.onrender.com",
-    repoUrl: "https://github.com/DAAK6115/gestion_livre",
-  },
-  {
-  name: "Formulaire de Récupération de données pour DocteurPc",
-  stack: "WordPress",
-  desc: "Création de formulaire pour avoir des informations sur le client et le type de support endommagé",
-  image: `${PUBLIC_BASE}projects/recup_docteurpc.jpg`, // ou .png selon ton fichier
-  demoUrl: "https://docteurpc.ci/formulaire-de-recuperation-de-donnees/",
-},
-{
-  name: "NexaFinance",
-  stack: "WordPress",
-  desc: "Site Web pour une société de conseil financier et de gestion à forte valeur ajoutée pour les petites et moyennes entreprises (PME) ",
-  image: `${PUBLIC_BASE}projects/nexafinance.jpg`, // ou .png selon ton fichier
-  demoUrl: "https://nexafinance.net/",
-},
-{
-  name: "DAAK_TECH",
-  stack: "WordPress",
-  desc: "Site Web pour une start-up qui conçoit des solutions numériques innovantes et sur mesure, fais de la maintenance informatique, de la récupération de données et la personnalisation d'ordinateur.",
-  image: `${PUBLIC_BASE}projects/daaktech.jpg`, // ou .png selon ton fichier
-  demoUrl: "https://daaktech.com/",
-},
-];
-
+const categories = ["Tous", ...new Set(projects.map((p) => p.category))];
 
 export default function Projects() {
+  const [filter, setFilter] = useState("Tous");
+  const visible = useMemo(
+    () => (filter === "Tous" ? projects : projects.filter((p) => p.category === filter)),
+    [filter]
+  );
+
   return (
-    <section
-      id="projects"
-      className="border-b border-slate-800 py-16"
-    >
-    <div className="max-w-6xl mx-auto px-4">
-      <h2 className="text-2xl md:text-3xl font-semibold mb-2">Projets</h2>
-      <p className="text-slate-400 mb-8">
-        Quelques exemples de projets sur lesquels j&apos;ai travaillé ou que je
-        peux réaliser pour vous.
-      </p>
+    <section id="projects" className="border-y border-ink-800 bg-ink-900/30 py-24">
+      <div className="container-x">
+        <SectionHeading index="02" kicker="Projets" title="Ce que j'ai construit.">
+          Applications, plateformes et sites réalisés pour des clients ou en projets personnels. Chaque carte renvoie vers
+          la démo en ligne et, quand il est public, le code source.
+        </SectionHeading>
 
-      <div className="grid gap-6 md:grid-cols-3">
-        {projects.map((project, index) => (
-          <motion.div
-            key={project.name}
-            className="rounded-2xl border border-slate-800 bg-slate-900/40 p-5 flex flex-col justify-between"
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.4, delay: index * 0.05 }}
-            whileHover={{ y: -6, scale: 1.02 }}
-          >
-            {/* Image du projet */}
-            {project.image && (
-  <div className="mb-4 rounded-3xl border border-slate-800/60 bg-slate-900/60 overflow-hidden">
-    <img
-      src={project.image}
-      alt={project.name}
-      className="w-full h-40 md:h-48 object-cover transition-transform duration-300 hover:scale-105"
-    />
-  </div>
-)}
+        <div className="mb-8 flex flex-wrap gap-2" role="tablist" aria-label="Filtrer les projets">
+          {categories.map((c) => (
+            <button
+              key={c}
+              role="tab"
+              aria-selected={filter === c}
+              onClick={() => setFilter(c)}
+              className={`rounded-lg border px-4 py-1.5 font-mono text-xs transition ${
+                filter === c
+                  ? "border-cyan-400 bg-cyan-400/10 text-cyan-300"
+                  : "border-ink-700 text-slate-400 hover:border-ink-600 hover:text-white"
+              }`}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
 
+        <motion.div layout className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <AnimatePresence mode="popLayout">
+            {visible.map((p) => (
+              <motion.article
+                key={p.name}
+                layout
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.96 }}
+                transition={{ duration: 0.3 }}
+                className="card group flex flex-col overflow-hidden transition-colors hover:border-cyan-400/50"
+              >
+                <div className="relative aspect-[16/10] overflow-hidden bg-ink-800">
+                  <img
+                    src={p.image}
+                    alt={`Aperçu du projet ${p.name}`}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink-900/80 via-transparent to-transparent" />
+                  <span className="absolute left-3 top-3 rounded-md bg-ink-950/80 px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-cyan-300 backdrop-blur">
+                    {p.category}
+                  </span>
+                </div>
 
-            {/* Texte */}
-            <div className="flex-1 flex flex-col">
-              <h3 className="font-semibold mb-1 text-sky-100">
-                {project.name}
-              </h3>
-              <p className="text-xs text-sky-300 mb-3">{project.stack}</p>
-              <p className="text-sm text-slate-300 mb-4">{project.desc}</p>
+                <div className="flex flex-1 flex-col p-5">
+                  <h3 className="text-lg font-semibold text-white">{p.name}</h3>
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-400">{p.desc}</p>
 
-              <div className="mt-auto flex flex-wrap gap-3 text-xs">
-                {project.demoUrl && (
-                  <a
-                    href={project.demoUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="px-3 py-1.5 rounded-full bg-sky-500 hover:bg-sky-400 font-medium transition"
-                  >
-                    Demo
-                  </a>
-                )}
-                {project.repoUrl && (
-                  <a
-                    href={project.repoUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="px-3 py-1.5 rounded-full border border-slate-600 hover:border-sky-400 transition"
-                  >
-                    Code
-                  </a>
-                )}
-              </div>
-            </div>
-          </motion.div>
-        ))}
+                  <ul className="mt-4 flex flex-wrap gap-1.5">
+                    {p.stack.map((s) => (
+                      <li key={s} className="chip">
+                        {s}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-5 flex items-center gap-4 text-sm">
+                    <a
+                      href={p.demoUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 font-medium text-cyan-300 hover:text-cyan-200"
+                    >
+                      Voir la démo <Icon name="external" size={14} />
+                    </a>
+                    {p.repoUrl && (
+                      <a
+                        href={p.repoUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 text-slate-400 hover:text-white"
+                      >
+                        <GithubIcon size={15} /> Code
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </motion.article>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </div>
-    </div>
     </section>
   );
 }

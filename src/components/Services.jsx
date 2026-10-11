@@ -1,51 +1,32 @@
-import { motion } from "framer-motion";
-
-const services = [
-  {
-    title: "Sites Internet et Applications web sur mesure",
-    desc: "Sites et tableaux de bord modernes, optimisés pour la performance et l'expérience utilisateur.",
-  },
-  {
-    title: "Applications mobiles",
-    desc: "Apps mobiles pour accompagner vos utilisateurs partout, avec une interface simple et claire.",
-  },
-  {
-    title: "Maintenance & support",
-    desc: "Surveillance, corrections et améliorations continues de vos applications et serveurs.",
-  },
-  {
-    title: "Récupération de données",
-    desc: "Accompagnement pour retrouver, nettoyer et structurer vos données importantes.",
-  },
-];
+import { services } from "../data";
+import Reveal from "./Reveal";
+import SectionHeading from "./SectionHeading";
+import { Icon } from "./Icons";
 
 export default function Services() {
   return (
-    <div className="max-w-6xl mx-auto px-4">
-      <h2 className="text-2xl md:text-3xl font-semibold mb-2">Ce que je fais</h2>
-      <p className="text-slate-400 mb-8">
-        J&apos;accompagne les entreprises, associations et indépendants à
-        transformer leurs besoins en solutions concrètes.
-      </p>
+    <section id="services" className="py-24">
+      <div className="container-x">
+        <SectionHeading index="05" kicker="Services" title="Comment je peux vous aider.">
+          J&apos;accompagne entreprises, associations et indépendants pour transformer un besoin en solution concrète.
+        </SectionHeading>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        {services.map((service, index) => (
-          <motion.div
-            key={service.title}
-            className="rounded-2xl border border-slate-800 bg-slate-900/40 p-5 hover:border-sky-400/60 transition-transform"
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.25 }}
-            transition={{ duration: 0.4, delay: index * 0.05 }}
-            whileHover={{ y: -6, scale: 1.02 }}
-          >
-            <h3 className="font-semibold mb-2 text-sky-100">
-              {service.title}
-            </h3>
-            <p className="text-sm text-slate-300">{service.desc}</p>
-          </motion.div>
-        ))}
+        <div className="grid gap-5 md:grid-cols-2">
+          {services.map((s, i) => (
+            <Reveal key={s.title} delay={i * 0.06}>
+              <div className="card group flex h-full gap-5 p-6 transition-colors hover:border-cyan-400/40">
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-cyan-400/10 text-cyan-300 transition group-hover:bg-cyan-400 group-hover:text-ink-950">
+                  <Icon name={s.icon} />
+                </span>
+                <div>
+                  <h3 className="font-semibold text-white">{s.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-400">{s.desc}</p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
 }

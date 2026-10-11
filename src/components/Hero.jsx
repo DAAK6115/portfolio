@@ -1,88 +1,124 @@
 import { motion } from "framer-motion";
+import { profile, projects, skillGroups } from "../data";
+import useTypewriter from "../hooks/useTypewriter";
+import CountUp from "./CountUp";
+import { Icon, GithubIcon, LinkedinIcon } from "./Icons";
+
+const years = Math.max(1, new Date().getFullYear() - profile.startYear);
+const techCount = new Set(skillGroups.flatMap((g) => g.items)).size;
+
+const stats = [
+  { value: projects.length, suffix: "", label: "Projets en ligne" },
+  { value: years, suffix: "+", label: "Ans de pratique" },
+  { value: techCount, suffix: "", label: "Technologies" },
+];
 
 export default function Hero() {
+  const role = useTypewriter(profile.roles);
+
   return (
-    <section
-      id="home"
-      className="min-h-[70vh] flex items-center border-b border-slate-800"
-    >
-      <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-[3fr,2fr] gap-10">
-        {/* Texte principal */}
+    <section id="home" className="relative overflow-hidden pt-32 pb-20 sm:pt-40 sm:pb-28">
+      <div className="bg-grid pointer-events-none absolute inset-0" />
+      <div className="pointer-events-none absolute -top-40 left-1/2 h-[520px] w-[820px] -translate-x-1/2 rounded-full bg-cyan-500/10 blur-3xl" />
+
+      <div className="container-x relative grid items-center gap-14 lg:grid-cols-[1.15fr,1fr]">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="space-y-5"
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
-          <p className="text-sm uppercase tracking-[0.25em] text-slate-400">
-            Portfolio
+          <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-ink-700 bg-ink-900/70 px-3 py-1.5 font-mono text-xs text-slate-300">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+            </span>
+            Ouvert aux stages & missions
           </p>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight text-slate-50">
-            DIOMANDE AZZIZ ANGE KEVIN
+          <h1 className="text-4xl font-extrabold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl">
+            Je conçois des produits web & mobiles{" "}
+            <span className="bg-gradient-to-r from-cyan-300 to-cyan-500 bg-clip-text text-transparent">fiables</span>.
           </h1>
 
-          <p className="text-lg md:text-xl text-sky-200">
-            Étudiant en{" "}
-            <span className="font-semibold">
-              Informatique Génie-Logiciel
-            </span>{" "}
-            passionné par la créations de nouvelles solutions numériques.
+          <p className="mt-5 h-8 font-mono text-lg text-amber-300 sm:text-xl">
+            <span className="text-slate-500">&gt; </span>
+            {role}
+            <span className="ml-0.5 inline-block h-5 w-[2px] translate-y-1 bg-amber-300 animate-blink" />
           </p>
 
-          <p className="text-sm md:text-base text-slate-300 max-w-xl">
-            En plus de cela, je suis aussi{" "}
-            <span className="font-semibold">
-              apprenti maintenancier informatique
-            </span>{" "}
-            et{" "}
-            <span className="font-semibold">
-              récupérateur de données perdues
-            </span>
-            . J&apos;aime autant concevoir des produit digitaux que
-            dépanner et sécuriser les outils numériques de mon entourage.
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-400">
+            Je suis <strong className="font-semibold text-slate-200">{profile.name}</strong>, étudiant en Master
+            Informatique Génie Logiciel à Abidjan. Je construis des applications avec React, Django et Flutter, et je
+            maintiens aussi les outils numériques de mon entourage.
           </p>
 
-          <div className="flex flex-wrap gap-3 pt-2">
-            <a
-              href="#contact"
-              className="px-4 py-2 rounded-full bg-sky-500 hover:bg-sky-400 text-sm font-medium transition"
-            >
+          <div className="mt-8 flex flex-wrap gap-3">
+            <a href="#projects" className="btn btn-primary">
+              Voir mes projets <Icon name="arrow" size={16} />
+            </a>
+            <a href="#contact" className="btn btn-ghost">
               Me contacter
             </a>
-            <a
-              href="#about"
-              className="px-4 py-2 rounded-full border border-slate-600 hover:border-sky-400 text-sm font-medium transition"
-            >
-              Voir mon profil complet
+            {profile.cv && (
+              <a href={profile.cv} download className="btn btn-ghost">
+                <Icon name="download" size={16} /> CV
+              </a>
+            )}
+          </div>
+
+          <div className="mt-8 flex items-center gap-4 text-slate-400">
+            <a href={profile.github} target="_blank" rel="noreferrer" aria-label="GitHub" className="transition hover:text-white">
+              <GithubIcon size={22} />
+            </a>
+            <a href={profile.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="transition hover:text-white">
+              <LinkedinIcon size={22} />
+            </a>
+            <a href={`mailto:${profile.email}`} aria-label="E-mail" className="transition hover:text-white">
+              <Icon name="mail" size={22} />
             </a>
           </div>
         </motion.div>
 
-        {/* Carte résumé */}
+        {/* Terminal */}
         <motion.div
-          initial={{ opacity: 0, x: 24 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="self-center"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          className="animate-float"
         >
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-5 space-y-4">
-            <h2 className="text-sm font-semibold text-slate-200">
-              Infos rapides
-            </h2>
-            <ul className="text-xs md:text-sm text-slate-300 space-y-1.5">
-              <li>
-                🎓 Master 1, Informatique Génie-Logiciel — IIT
-                (Grand-Bassam, VITIB)
-              </li>
-              <li>📍 Abidjan, Cocody Faya — Côte d&apos;Ivoire</li>
-              <li>📧 diomandezazzizangekevin@gmail.com</li>
-              <li>📱 +225 01 4093 7504</li>
-              <li>🌍 Ivoirienne — né le 16 juin 2005</li>
-              <li>💼 Ouvert aux stages & opportunités</li>
-            </ul>
+          <div className="overflow-hidden rounded-2xl border border-ink-700 bg-ink-900/80 shadow-2xl shadow-cyan-500/5">
+            <div className="flex items-center gap-2 border-b border-ink-700 bg-ink-800/70 px-4 py-3">
+              <span className="h-3 w-3 rounded-full bg-red-400/80" />
+              <span className="h-3 w-3 rounded-full bg-amber-400/80" />
+              <span className="h-3 w-3 rounded-full bg-emerald-400/80" />
+              <span className="ml-3 font-mono text-xs text-slate-500">developer.js</span>
+            </div>
+            <pre className="overflow-x-auto p-5 font-mono text-[13px] leading-7 text-slate-300">
+              <code>
+                <span className="text-purple-400">const</span> <span className="text-cyan-300">dev</span> = {"{"}
+                {"\n"}  nom: <span className="text-emerald-300">"Azziz Ange Kevin"</span>,
+                {"\n"}  rôle: <span className="text-emerald-300">"Full-stack & mobile"</span>,
+                {"\n"}  stack: [<span className="text-emerald-300">"React"</span>, <span className="text-emerald-300">"Django"</span>, <span className="text-emerald-300">"Flutter"</span>],
+                {"\n"}  base: <span className="text-emerald-300">"Abidjan, CI"</span>,
+                {"\n"}  disponible: <span className="text-amber-300">true</span>,
+                {"\n"}{"}"};
+              </code>
+            </pre>
           </div>
         </motion.div>
+      </div>
+
+      <div className="container-x relative mt-16">
+        <dl className="grid grid-cols-3 gap-4 rounded-2xl border border-ink-700/70 bg-ink-900/50 p-5 backdrop-blur-sm sm:p-7">
+          {stats.map((s) => (
+            <div key={s.label} className="text-center">
+              <dt className="order-2 mt-1 text-xs text-slate-500 sm:text-sm">{s.label}</dt>
+              <dd className="font-mono text-3xl font-semibold text-white sm:text-4xl">
+                <CountUp to={s.value} suffix={s.suffix} />
+              </dd>
+            </div>
+          ))}
+        </dl>
       </div>
     </section>
   );

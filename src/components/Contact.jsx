@@ -1,97 +1,96 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-
-const DEST_EMAIL = "diomandezazzizangekevin@gmail.com";
+import { profile } from "../data";
+import Reveal from "./Reveal";
+import SectionHeading from "./SectionHeading";
+import { Icon, GithubIcon, LinkedinIcon } from "./Icons";
 
 export default function Contact() {
   const [copied, setCopied] = useState(false);
+  const [form, setForm] = useState({ name: "", subject: "", message: "" });
 
-  function handleCopy() {
+  const update = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+
+  function copy() {
     navigator.clipboard
-      ?.writeText(DEST_EMAIL)
+      ?.writeText(profile.email)
       .then(() => {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       })
-      .catch(() => {
-        setCopied(false);
-      });
+      .catch(() => setCopied(false));
   }
 
+  function submit(e) {
+    e.preventDefault();
+    const subject = form.subject || "Contact via le portfolio";
+    const body = `${form.message}\n\n— ${form.name}`;
+    window.location.href = `mailto:${profile.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  }
+
+  const field =
+    "w-full rounded-lg border border-ink-700 bg-ink-950/70 px-4 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400";
+
   return (
-    <section id="contact" className="border-t border-slate-800 py-16">
-      <motion.div
-        className="max-w-4xl mx-auto px-4"
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.5 }}
-      >
-        <p className="text-xs uppercase tracking-[0.25em] text-slate-500 mb-2">
-          Me contacter
-        </p>
-        <h2 className="text-2xl md:text-3xl font-semibold mb-3">
-          Parlons de ton projet
-        </h2>
-        <p className="text-slate-400 max-w-2xl">
-          Tu cherches quelqu’un pour t’aider sur un projet créatif, technique
-          ou tu veux simplement en savoir plus sur mon profil ?
-          <br className="hidden sm:block" /> Contacte-moi directement par e-mail.
-        </p>
+    <section id="contact" className="border-t border-ink-800 bg-ink-900/30 py-24">
+      <div className="container-x">
+        <SectionHeading index="06" kicker="Contact" title="Travaillons ensemble.">
+          Un projet, un stage, une collaboration ? Écrivez-moi, je réponds rapidement.
+        </SectionHeading>
 
-        {/* Carte de contact */}
-        <div className="mt-8 rounded-2xl border border-slate-800 bg-slate-900/70 backdrop-blur p-6 md:p-8 flex flex-col md:flex-row gap-6 md:items-center">
-          <div className="flex-1 space-y-2">
-            <h3 className="text-lg md:text-xl font-semibold text-slate-50">
-              Disponibilité & collaborations
-            </h3>
-            <p className="text-sm text-slate-400">
-              Je suis ouvert aux{" "}
-              <span className="font-medium text-sky-300">
-                collaborations, stages, missions
-              </span>{" "}
-              et projets sérieux autour de la création de site web, du développement d'applications web et mobile, de la récupération de données
-              et de la maintenance.
-            </p>
-
-            <div className="mt-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-500 mb-1">
-                Adresse e-mail
-              </p>
-              <div className="inline-flex items-center gap-2 rounded-full bg-slate-950/60 border border-slate-700 px-4 py-2">
-                <span className="text-xs md:text-sm text-sky-100 font-mono">
-                  {DEST_EMAIL}
-                </span>
-              </div>
+        <div className="grid gap-8 lg:grid-cols-[1fr,1.2fr]">
+          <Reveal className="space-y-4">
+            <div className="card p-5">
+              <p className="font-mono text-[11px] uppercase tracking-wider text-slate-500">E-mail</p>
+              <p className="mt-1 break-all font-mono text-sm text-cyan-200">{profile.email}</p>
+              <button type="button" onClick={copy} className="mt-3 inline-flex items-center gap-2 text-sm text-slate-300 hover:text-white">
+                <Icon name={copied ? "check" : "copy"} size={15} />
+                {copied ? "Adresse copiée" : "Copier l'adresse"}
+              </button>
             </div>
-          </div>
+            <div className="card flex items-center gap-3 p-5 text-sm">
+              <Icon name="phone" size={18} className="text-cyan-400" />
+              <a href={`tel:${profile.phone.replace(/\s/g, "")}`} className="text-slate-200 hover:text-cyan-300">
+                {profile.phone}
+              </a>
+            </div>
+            <div className="card flex items-center gap-3 p-5 text-sm text-slate-200">
+              <Icon name="pin" size={18} className="text-cyan-400" />
+              {profile.location}
+            </div>
+            <div className="flex gap-3">
+              <a href={profile.github} target="_blank" rel="noreferrer" className="btn btn-ghost flex-1">
+                <GithubIcon size={16} /> GitHub
+              </a>
+              <a href={profile.linkedin} target="_blank" rel="noreferrer" className="btn btn-ghost flex-1">
+                <LinkedinIcon size={16} /> LinkedIn
+              </a>
+            </div>
+          </Reveal>
 
-          {/* Boutons d’action */}
-          <div className="md:w-[220px] flex flex-col gap-3">
-            <a
-              href={`mailto:${DEST_EMAIL}?subject=${encodeURIComponent(
-                "Contact via le portfolio"
-              )}`}
-              className="inline-flex items-center justify-center rounded-full bg-sky-500 hover:bg-sky-400 text-sm font-medium text-slate-950 px-4 py-2.5 transition"
-            >
-              ✉️ M&apos;écrire un e-mail
-            </a>
-
-            <button
-              type="button"
-              onClick={handleCopy}
-              className="inline-flex items-center justify-center rounded-full border border-slate-600 hover:border-sky-400 text-sm font-medium text-slate-100 px-4 py-2.5 transition"
-            >
-              {copied ? "Adresse copiée ✔" : "Copier l’adresse e-mail"}
-            </button>
-
-            <p className="text-[11px] text-slate-500 text-center">
-              Tu peux aussi m&apos;ajouter à tes contacts pour me retrouver plus
-              facilement plus tard.
-            </p>
-          </div>
+          <Reveal delay={0.1}>
+            <form onSubmit={submit} className="card space-y-4 p-6">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="name" className="mb-1.5 block text-xs text-slate-400">Nom</label>
+                  <input id="name" name="name" required value={form.name} onChange={update} placeholder="Votre nom" className={field} />
+                </div>
+                <div>
+                  <label htmlFor="subject" className="mb-1.5 block text-xs text-slate-400">Sujet</label>
+                  <input id="subject" name="subject" value={form.subject} onChange={update} placeholder="Ex : Création de site web" className={field} />
+                </div>
+              </div>
+              <div>
+                <label htmlFor="message" className="mb-1.5 block text-xs text-slate-400">Message</label>
+                <textarea id="message" name="message" required rows={6} value={form.message} onChange={update} placeholder="Décrivez votre projet…" className={`${field} resize-y`} />
+              </div>
+              <button type="submit" className="btn btn-primary w-full sm:w-auto">
+                Envoyer par e-mail <Icon name="arrow" size={16} />
+              </button>
+              <p className="text-xs text-slate-500">Ce formulaire ouvre votre application de messagerie avec le message pré-rempli.</p>
+            </form>
+          </Reveal>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

@@ -1,79 +1,49 @@
-import { motion } from "framer-motion";
-
-const techSkills = [
-  "Développement web (front & back)",
-  "Applications mobiles",
-  "Maintenance informatique",
-  "Récupération de données perdues",
-];
-
-const softSkills = [
-  "Travail en équipe",
-  "Autonomie & curiosité",
-  "Capacité d'adaptation",
-  "Sens du service client",
-];
+import { skillGroups, softSkills } from "../data";
+import Reveal from "./Reveal";
+import SectionHeading from "./SectionHeading";
+import { Icon } from "./Icons";
 
 export default function Skills() {
   return (
-    <section
-      id="skills"
-      className="py-16 border-b border-slate-800 bg-slate-950/40"
-    >
-      <div className="max-w-6xl mx-auto px-4 space-y-6">
-        <h2 className="text-2xl md:text-3xl font-semibold">Compétences</h2>
-        <p className="text-slate-300 text-sm md:text-base max-w-3xl">
-          Voici un aperçu des compétences que je mets au service des projets
-          sur lesquels je travaille, autant techniques que humaines.
-        </p>
+    <section id="skills" className="py-24">
+      <div className="container-x">
+        <SectionHeading index="03" kicker="Stack" title="Technologies & outils.">
+          Les technologies que j&apos;utilise au quotidien, regroupées par domaine.
+        </SectionHeading>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          <motion.div
-            initial={{ opacity: 0, x: -16 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.4 }}
-            className="rounded-2xl border border-slate-800 bg-slate-900/40 p-5"
-          >
-            <h3 className="font-semibold mb-3 text-slate-100 text-sm md:text-base">
-              Compétences techniques
-            </h3>
-            <ul className="space-y-2 text-xs md:text-sm text-slate-300">
-              {techSkills.map(skill => (
-                <li
-                  key={skill}
-                  className="flex items-center gap-2 rounded-full border border-slate-700/70 bg-slate-900/80 px-3 py-1.5"
-                >
-                  <span className="h-1.5 w-1.5 rounded-full bg-sky-400" />
-                  {skill}
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 16 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.4, delay: 0.05 }}
-            className="rounded-2xl border border-slate-800 bg-slate-900/40 p-5"
-          >
-            <h3 className="font-semibold mb-3 text-slate-100 text-sm md:text-base">
-              Compétences transversales
-            </h3>
-            <ul className="space-y-2 text-xs md:text-sm text-slate-300">
-              {softSkills.map(skill => (
-                <li
-                  key={skill}
-                  className="flex items-center gap-2 rounded-full border border-slate-700/70 bg-slate-900/80 px-3 py-1.5"
-                >
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                  {skill}
-                </li>
-              ))}
-            </ul>
-          </motion.div>
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {skillGroups.map((g, i) => (
+            <Reveal key={g.title} delay={i * 0.05}>
+              <div className="card h-full p-5 transition-colors hover:border-cyan-400/40">
+                <div className="mb-4 flex items-center gap-3">
+                  <span className="grid h-9 w-9 place-items-center rounded-lg bg-cyan-400/10 text-cyan-300">
+                    <Icon name={g.icon} size={18} />
+                  </span>
+                  <h3 className="font-semibold text-white">{g.title}</h3>
+                </div>
+                <ul className="flex flex-wrap gap-2">
+                  {g.items.map((item) => (
+                    <li key={item} className="chip">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
+          ))}
         </div>
+
+        <Reveal className="mt-8">
+          <div className="card flex flex-wrap items-center gap-x-6 gap-y-3 p-5">
+            <h3 className="font-mono text-xs uppercase tracking-wider text-amber-400">Savoir-être</h3>
+            {softSkills.map((s) => (
+              <span key={s} className="flex items-center gap-2 text-sm text-slate-300">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                {s}
+              </span>
+            ))}
+          </div>
+        </Reveal>
       </div>
     </section>
   );
